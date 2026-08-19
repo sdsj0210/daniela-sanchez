@@ -1,0 +1,76 @@
+services:
+  web:
+    build: .
+    container_name: daniela_container
+
+    ports:
+      - "8080:80"
+
+    volumes:
+      # React compilado -> Apache
+      - ./frontend/tajyrestaurante/build:/var/www/html
+
+      # Backend PHP
+      - ./backend/app:/var/www/app
+
+      # Configuración PHP
+      - ./backend/config:/var/www/config
+
+      # Configuración Apache
+      - ./apache-config/vhost.conf:/etc/apache2/sites-available/000-default.conf
+
+    restart: unless-stopped
+
+    command: >
+      bash -c "a2enmod headers rewrite && apache2-foreground"
+
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.4
+    container_name: daniela_db
+
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: daniela_proyecto
+      MYSQL_USER: app_user
+      MYSQL_PASSWORD: app_pass
+
+    # Para conectarnos desde MySQL Workbench
+    ports:
+      - "3306:3306"
+
+    volumes:
+      - db_data:/var/lib/mysql
+
+    restart: unless-stopped
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: daniela_phpmyadmin
+
+    ports:
+      - "8081:80"
+
+    environment:
+      PMA_HOST: db
+
+    depends_on:
+      - db
+
+    restart: unless-stopped
+
+  netdata:
+    image: netdata/netdata:latest
+    container_name: daniela_netdata
+    ports:
+      - "19999:19999"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+    restart: unless-stopped
+
+volumes:
+  db_data:

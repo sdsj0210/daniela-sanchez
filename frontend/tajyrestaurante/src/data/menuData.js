@@ -1,0 +1,127 @@
+export const menuData = [
+  {
+    title: "Entradas",
+    image: "/assets/menu/entrantes.webp",
+    items: [
+      { name: "Mandioca frita", price: "4€", vegano: true, picante: 0 },
+      {
+        name: "Yuca con mojo cubano",
+        price: "4.50€",
+        vegano: true,
+        picante: 1,
+      },
+      {
+        name: "Porción Chipa Guazú o Sopa",
+        price: "4€",
+        vegano: false,
+        picante: 0,
+      },
+      {
+        name: "Empanadas Paraguayas",
+        price: "3.85€",
+        vegano: false,
+        picante: 1,
+      },
+      { name: "Mbeju", price: "4€", vegano: false, picante: 0 },
+      { name: "Tamales", price: "8.50€", vegano: false, picante: 2 },
+      { name: "Tostones", price: "8€", vegano: true, picante: 1 },
+      { name: "Mariquitas de Plátano", price: "3€", vegano: true, picante: 0 },
+    ],
+  },
+  {
+    title: "Arroces y Ensaladas",
+    image: "/assets/menu/arroces.webp",
+    items: [
+      { name: "Arroz Quesu", price: "6€", vegano: false, picante: 0 },
+      { name: "Arroz Blanco", price: "5€", vegano: true, picante: 0 },
+      { name: "Arroz Congrí", price: "5€", vegano: true, picante: 0 },
+      { name: "Arroz Frito Cubano", price: "8€", vegano: false, picante: 1 },
+      { name: "Arroz Amarillo", price: "5€", vegano: false, picante: 0 },
+      { name: "Ensalada de Arroz", price: "8€", vegano: false, picante: 0 },
+      { name: "Ensalada Primavera", price: "7€", vegano: true, picante: 0 },
+      { name: "Ensalada César", price: "8€", vegano: false, picante: 0 },
+    ],
+  },
+  {
+    title: "Carnes",
+    image: "/assets/menu/carnes.webp",
+    items: [
+      { name: "Ropa Vieja", price: "15€", vegano: false, picante: 0 },
+      { name: "Vaca Frita Cubana", price: "15€", vegano: false, picante: 0 },
+      { name: "Bistec de Cerdo", price: "12€", vegano: false, picante: 0 },
+      { name: "Bistec de Res", price: "15€", vegano: false, picante: 0 },
+      {
+        name: "Bife Koygua a Caballo",
+        price: "15€",
+        vegano: false,
+        picante: 0,
+      },
+      {
+        name: "Milanesa Napolitana de Pollo",
+        price: "15€",
+        vegano: false,
+        picante: 0,
+      },
+      {
+        name: "Milanesa Napolitana de Vaca",
+        price: "17€",
+        vegano: false,
+        picante: 0,
+      },
+      { name: "Marinera de Carne", price: "17€", vegano: false, picante: 0 },
+    ],
+  },
+  {
+    title: "Sopas o Caldos",
+    image: "/assets/menu/sopas-caldos.webp",
+    items: [
+      { name: "Puchero con Maíz", price: "15€", vegano: false, picante: 0 },
+      {
+        name: "Picadito de Carne con Papas",
+        price: "15€",
+        vegano: false,
+        picante: 0,
+      },
+      { name: "Vori Vori", price: "13.5€", vegano: false, picante: 0 },
+      { name: "Frijoles Negros", price: "10€", vegano: true, picante: 0 },
+      { name: "Frijoles Rojos", price: "10€", vegano: false, picante: 0 },
+      { name: "Caldo de Pollo", price: "12€", vegano: false, picante: 0 },
+      { name: "Crema de Zucchini", price: "9.50€", vegano: true, picante: 0 },
+      { name: "Crema de Calabaza", price: "9.50€", vegano: true, picante: 0 },
+    ],
+  },
+  {
+    title: "Postres",
+    image: "/assets/menu/postres.webp",
+    items: [
+      {
+        name: "Dulce de Guayaba con Queso",
+        price: "3.50€",
+        vegano: true,
+        picante: 0,
+      },
+      { name: "Flan de la Abuela", price: "4.50€", vegano: false, picante: 0 },
+      { name: "Arroz con Leche", price: "4.50€", vegano: false, picante: 0 },
+      { name: "Natilla", price: "3.50€", vegano: false, picante: 0 },
+      { name: "Dulce de Coco", price: "3€", vegano: true, picante: 0 },
+      { name: "Dulce de Frutabomba", price: "3.50€", vegano: true, picante: 0 },
+      {
+        name: "Bizcocho de Mandarina",
+        price: "3.50€",
+        vegano: true,
+        picante: 0,
+      },
+    ],
+  },
+];
+
+export const dishesData = [
+  { name: "Vaca Frita", image: "/assets/gallery/vaca-frita.webp" },
+  { name: "Sopa Paraguaya", image: "/assets/gallery/sopa-paraguaya.webp" },
+  { name: "Yuca con Mojo Cubano", image: "/assets/gallery/yuca-con-mojo.webp" },
+  { name: "Bife Koygua", image: "/assets/gallery/bife-koygua.webp" },
+  { name: "Chipa Guazu", image: "/assets/gallery/chipa-guazu.webp" },
+  { name: "Ropa Vieja", image: "/assets/gallery/ropa-vieja.webp" },
+  { name: "Arroz Amarillo", image: "/assets/gallery/arroz-amarillo.webp" },
+  { name: "Asadito", image: "/assets/gallery/asadito.webp" },
+];

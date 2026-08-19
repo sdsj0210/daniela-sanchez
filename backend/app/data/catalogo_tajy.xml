@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<catalogo restaurante="Tajy">
+    <item>
+        <nombre>Mandioca frita</nombre>
+        <precio>4.00</precio>
+        <categoria>Entradas</categoria>
+        <vegano>true</vegano>
+        <picante>0</picante>
+    </item>
+
+    <item>
+        <nombre>Yuca con mojo cubano</nombre>
+        <precio>4.50</precio>
+        <categoria>Entradas</categoria>
+        <vegano>true</vegano>
+        <picante>1</picante>
+    </item>
+
+    <item>
+        <nombre>Ropa Vieja</nombre>
+        <precio>15.00</precio>
+        <categoria>Carnes</categoria>
+        <vegano>false</vegano>
+        <picante>0</picante>
+    </item>
+
+    <item>
+        <nombre>Vori Vori</nombre>
+        <precio>13.50</precio>
+        <categoria>Sopas o Caldos</categoria>
+        <vegano>false</vegano>
+        <picante>0</picante>
+    </item>
+
+    <item>
+        <nombre>Flan de la Abuela</nombre>
+        <precio>4.50</precio>
+        <categoria>Postres</categoria>
+        <vegano>false</vegano>
+        <picante>0</picante>
+    </item>
+</catalogo>

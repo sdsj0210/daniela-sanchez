@@ -1,0 +1,32 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  min-height: 100%;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  background-color: var(--tajy-negro);
+  color: var(--tajy-blanco);
+}
+
+h1,
+h2,
+h3 {
+  font-family: "Playfair Display", serif;
+}
+
+a {
+  color: var(--tajy-miel);
+  text-decoration: none;
+}
+
+li {
+  list-style: none;
+}
