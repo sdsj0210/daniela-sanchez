@@ -1,10 +1,9 @@
+import { useState } from "react";
 import { useForm } from "../../hooks/useForm";
 import { FormField } from "../FormField";
 import { DateInput } from "../Inputs/DateInput";
 import { TimeInput } from "../Inputs/TimeInput";
-import emailjs from "@emailjs/browser";
 import { SuccessMessage } from "../SuccessMessage";
-import { useCart } from "../../context/CartContext";
 
 const today = new Date().toISOString().split("T")[0];
 
@@ -21,89 +20,189 @@ const reservationInitial = {
 const validateReservation = (data, setErrors) => {
   const errors = {};
 
-  if (!data.name.trim()) errors.name = "Nombre obligatorio";
-  if (!data.email.includes("@")) errors.email = "Email inválido";
-  if (!data.phone.trim()) errors.phone = "Teléfono obligatorio";
-  if (!data.date) errors.date = "Fecha obligatoria";
-  if (!data.hour) errors.hour = "Hora obligatoria";
-
-  if (data.hour) {
-    const [h] = data.hour.split(":").map(Number);
-    if (h < 13 || h > 23) {
-      errors.hour = "Horario disponible de 13:00 a 23:00";
-    }
+  if (!data.name.trim()) {
+    errors.name = "Nombre obligatorio";
   }
 
-  if (!data.guests || data.guests < 1 || data.guests > 10)
-    errors.guests = "Debe ser entre 1 y 10 personas";
+  if (!data.email.includes("@")) {
+    errors.email = "Email inválido";
+  }
 
-  if (!data.message.trim()) errors.message = "Mensaje obligatorio";
+  if (!data.phone.trim()) {
+    errors.phone = "Teléfono obligatorio";
+  }
+
+  if (!data.date) {
+    errors.date = "Fecha obligatoria";
+  }
+
+  if (!data.hour) {
+    errors.hour = "Hora obligatoria";
+  }
+
+  if (!data.guests || data.guests < 1 || data.guests > 10) {
+    errors.guests = "Debe ser entre 1 y 10 personas";
+  }
+
+  if (!data.message.trim()) {
+    errors.message = "Mensaje obligatorio";
+  }
 
   setErrors(errors);
+
   return Object.keys(errors).length === 0;
 };
 
 export const ReservationForm = () => {
-  const { cartItems, clearCart } = useCart();
+  const [apiMessage, setApiMessage] = useState("");
+  const [apiError, setApiError] = useState("");
+  const [availability, setAvailability] = useState(null);
 
-  const { formData, errors, success, handleChange, handleSubmit, handleReset } =
-    useForm(
-      reservationInitial,
-      validateReservation,
+  const {
+    formData,
+    errors,
+    success,
+    handleChange,
+    handleSubmit,
+    handleReset,
+  } = useForm(
+    reservationInitial,
+    validateReservation,
 
-      async (data) => {
-        try {
-          const total = cartItems
-            .reduce(
-              (acc, item) => acc + parseFloat(item.price.replace("€", "")),
-              0,
-            )
-            .toFixed(2);
-          await emailjs.send(
-            "service_t8t9n8w",
-            "template_wae7hw1",
-            {
-              ...data,
-              cart: cartItems
-                .map((item) => `${item.name} - ${item.price}`)
-                .join("<br/>"),
-              total: total + "€",
-            },
-            "Cqs446_kXWoRk8w7k",
-          );
-          clearCart();
-          console.log("Carrito enviado:", cartItems);
-        } catch (error) {
-          console.error("Error al enviar la reserva:", error);
+    async (data) => {
+      setApiMessage("");
+      setApiError("");
+      setAvailability(null);
+
+      try {
+        const response = await fetch("/api/reservations.php", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        });
+
+        const result = await response.json();
+
+        /*
+         * La franja está llena o no tiene plazas suficientes.
+         */
+        if (response.status === 409) {
+          setApiError(result.error || "No hay disponibilidad");
+          setAvailability({
+            disponibles: result.disponibles ?? 0,
+          });
+
+          throw new Error(result.error || "No hay disponibilidad");
         }
-      },
-    );
+
+        /*
+         * El backend ha rechazado algún dato.
+         */
+        if (response.status === 422) {
+          const backendErrors = result.errors || {};
+
+          const message =
+            Object.values(backendErrors)[0] ||
+            "Los datos introducidos no son válidos";
+
+          setApiError(message);
+
+          throw new Error(message);
+        }
+
+        /*
+         * Cualquier otro error del servidor.
+         */
+        if (!response.ok) {
+          const message =
+            result.error || "No se pudo crear la reserva";
+
+          setApiError(message);
+
+          throw new Error(message);
+        }
+
+        /*
+         * Reserva creada correctamente.
+         */
+        setApiMessage(result.message);
+        setAvailability(result.aforo);
+
+        console.log("Reserva creada:", result);
+      } catch (error) {
+        console.error("Error al crear la reserva:", error);
+
+        /*
+         * Si no hemos recibido un mensaje concreto del backend,
+         * mostramos uno genérico.
+         */
+        if (!apiError) {
+          setApiError(
+            "No se pudo procesar la reserva. Inténtalo de nuevo.",
+          );
+        }
+
+        throw error;
+      }
+    },
+  );
 
   const handleGuestChange = (e) => {
     const value = e.target.value;
-    if (value === "" || (Number(value) >= 1 && Number(value) <= 10)) {
+
+    if (
+      value === "" ||
+      (Number(value) >= 1 && Number(value) <= 10)
+    ) {
       handleChange(e);
     }
+  };
+
+  const resetForm = () => {
+    handleReset();
+    setApiMessage("");
+    setApiError("");
+    setAvailability(null);
   };
 
   return (
     <main className="main-form">
       <h2>Reservá tu mesa</h2>
 
-      {success && (
-        <SuccessMessage message="✨ ¡Tu reserva fue enviada! Te confirmaremos pronto." />
+      {success && apiMessage && (
+        <SuccessMessage
+          message={`✨ ${apiMessage}`}
+        />
       )}
 
-      {cartItems.length > 0 && (
-        <div className="cart-summary">
-          <h3>🛒 Tu pedido</h3>
+      {success && availability && (
+        <div className="reservation-status">
+          <p>
+            Aforo de esta franja:{" "}
+            <strong>
+              {availability.ocupadas}/{availability.capacidad}
+            </strong>
+          </p>
 
-          {cartItems.map((item) => (
-            <div key={item.id} className="cart-summary-item">
-              <span>{item.name}</span>
-              <span>{item.price}</span>
-            </div>
-          ))}
+          <p>
+            Quedan{" "}
+            <strong>{availability.disponibles}</strong>{" "}
+            plazas disponibles.
+          </p>
+        </div>
+      )}
+
+      {apiError && (
+        <div className="reservation-error">
+          <p>⚠️ {apiError}</p>
+
+          {availability?.disponibles === 0 && (
+            <p>
+              Esta franja está completa. Selecciona otro horario.
+            </p>
+          )}
         </div>
       )}
 
@@ -181,7 +280,12 @@ export const ReservationForm = () => {
           <button type="submit" className="btn-primary">
             Reservar
           </button>
-          <button type="button" className="btn-secondary" onClick={handleReset}>
+
+          <button
+            type="button"
+            className="btn-secondary"
+            onClick={resetForm}
+          >
             Limpiar
           </button>
         </div>
