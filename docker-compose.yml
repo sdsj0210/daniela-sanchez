@@ -2,9 +2,7 @@ services:
   web:
     build: .
     container_name: daniela_container
-
-    ports:
-      - "8080:80"
+    mem_limit: 256m
 
     volumes:
       # React compilado -> Apache
@@ -30,16 +28,13 @@ services:
   db:
     image: mysql:8.4
     container_name: daniela_db
+    mem_limit: 512m
 
     environment:
       MYSQL_ROOT_PASSWORD: rootpass
       MYSQL_DATABASE: daniela_proyecto
       MYSQL_USER: app_user
       MYSQL_PASSWORD: app_pass
-
-    # Para conectarnos desde MySQL Workbench
-    ports:
-      - "3306:3306"
 
     volumes:
       - db_data:/var/lib/mysql
@@ -49,9 +44,7 @@ services:
   phpmyadmin:
     image: phpmyadmin:latest
     container_name: daniela_phpmyadmin
-
-    ports:
-      - "8081:80"
+    mem_limit: 128m
 
     environment:
       PMA_HOST: db
@@ -64,12 +57,13 @@ services:
   netdata:
     image: netdata/netdata:latest
     container_name: daniela_netdata
-    ports:
-      - "19999:19999"
+    mem_limit: 256m
+
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
+
     restart: unless-stopped
 
 volumes:
