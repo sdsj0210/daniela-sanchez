@@ -3,7 +3,7 @@
 <catalogo restaurante="Tajy">
     <item>
         <nombre>Mandioca frita</nombre>
-        <precio>precio-invalido</precio>
+        <precio>4.00</precio>
         <categoria>Entradas</categoria>
         <vegano>true</vegano>
         <picante>0</picante>
